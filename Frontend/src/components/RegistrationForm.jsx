@@ -96,7 +96,7 @@ const RegistrationForm = () => {
 
     try {
       setLoading(true);
-      const response = await axios.post('http://localhost:9999/user/register', formData);
+      const response = await axios.post('http://localhost:8080/public/signup', formData);
       setLoading(false);
       if (response.data === "CREATED" && response.status === 200) {
         toast.success('Registration successful!');
