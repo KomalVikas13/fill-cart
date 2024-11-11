@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import '../styling/Loginform.css';
 import logo from '../assets/FillCartLogo.png'
+import { FaEyeSlash } from "react-icons/fa6";
+import { FaEye } from "react-icons/fa";
 
 const Loginform = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -14,7 +16,7 @@ const Loginform = () => {
   };
 
   const validatePassword = (password) => {
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return passwordPattern.test(password);
   };
 
@@ -29,7 +31,7 @@ const Loginform = () => {
     } else if (name === 'password') {
       setErrors({
         ...errors,
-        password: value ? (validatePassword(value) ? '' : 'Password must be at least 6 characters and include uppercase, lowercase, number, and special character') : 'This field is required'
+        password: value ? (validatePassword(value) ? '' : 'Password must be at least 8 characters') : 'This field is required'
       });
     }
   };
@@ -43,7 +45,7 @@ const Loginform = () => {
     } else if (name === 'password') {
       setErrors({
         ...errors,
-        password: value ? (validatePassword(value) ? '' : 'Password must be at least 6 characters and include uppercase, lowercase, number, and special character') : 'This field is required'
+        password: value ? (validatePassword(value) ? '' : 'Password must be at least 8 characters') : 'This field is required'
       });
     }
   };
@@ -86,7 +88,7 @@ const Loginform = () => {
           {errors.email && <div className="error">{errors.email}</div>}
         </div>
 
-        <div className="input-field password-container">
+        <div className="input-field password-container relative">
           <input
             type={showPassword ? 'text' : 'password'}
             name="password"
@@ -96,16 +98,16 @@ const Loginform = () => {
             onBlur={handleBlur}
             required
           />
-          <span onClick={toggleShowPassword} className="show-password">
-            {showPassword ? '🙈' : '👁'}
-          </span>
+          {/* <span onClick={toggleShowPassword} className="show-password absolute right-0 top-1/2">
+            {showPassword ? <FaEye/>:<FaEyeSlash />}
+
+
+          </span> */}
           {errors.password && <div className="error">{errors.password}</div>}
         </div>
 
         <div className="checkbox-container">
-          <label>
-            <input type="checkbox" /> Remember for 30 days
-          </label>
+          
           <a href="#">Forgot password?</a>
         </div>
 
