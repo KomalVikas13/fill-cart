@@ -94,15 +94,26 @@ const RegistrationForm = () => {
       return;
     }
 
+    const formattedData = {
+        fullName: formData.fullName,
+        phoneNumber: formData.phoneNo,         
+        email: formData.email,
+        address: formData.address,
+        password: formData.newPassword        
+      };
+
     try {
       setLoading(true);
-      const response = await axios.post('http://localhost:9999/user/register', formData);
+      const response = await axios.post('http://localhost:8080/public/signup', formattedData);
       setLoading(false);
-      if (response.data === "CREATED" && response.status === 200) {
+      if (response.data === "CREATED" && response.status === 201) {
         toast.success('Registration successful!');
         toast.info(`Welcome, ${formData.fullName}!`);
         // navigator("/welcome");
       }
+    //   if (response.status === 409){
+    //     toast.warning('User already exists!')
+    //   }
     } catch (error) {
       setLoading(false);
       console.log(error.response.status, error.response.data);
