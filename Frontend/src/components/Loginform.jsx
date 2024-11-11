@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../styling/Loginform.css';
+import logo from '../assets/FillCartLogo.png'
 
 const Loginform = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -67,6 +68,7 @@ const Loginform = () => {
 
   return (
     <div className="login-container">
+      <img src={logo} alt="Fillcart" className="mx-auto w-24 mb-1" />
       <h2>Welcome back!</h2>
       <p>Please enter your details</p>
 

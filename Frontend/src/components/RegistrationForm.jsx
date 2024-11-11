@@ -7,7 +7,7 @@ import { BiLoaderCircle } from 'react-icons/bi';
 import logo from '../assets/FillCartLogo.png'
 
 const RegistrationForm = () => {
-//   const navigator = useNavigate();
+  //   const navigator = useNavigate();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -30,7 +30,7 @@ const RegistrationForm = () => {
   const handleBlur = (e) => {
     const { name, value } = e.target;
     let newError = '';
-  
+
     // Perform individual field validation based on name
     if (!value) {
       newError = 'This field is required';
@@ -45,14 +45,14 @@ const RegistrationForm = () => {
     } else if (!value) {
       newError = 'This field is required';
     }
-  
+
     // Update the errors state
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: newError,
     }));
-  };  
-  
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,29 +61,29 @@ const RegistrationForm = () => {
 
     // Basic required field validations
     if (!formData.fullName) newErrors.fullName = 'This field is required';
-  if (!formData.email) {
-    newErrors.email = 'This field is required';
-  } else if (!formRules.email(formData.email)) {
-    newErrors.email = 'Invalid email address.';
-  }
-  if (!formData.phoneNo) {
-    newErrors.phoneNo = 'This field is required';
-  } else if (!formRules.mobileNo(formData.phoneNo)) {
-    newErrors.phoneNo = 'Mobile number must be a 10-digit number.';
-  }
-  if (!formData.address) newErrors.address = 'This field is required';
+    if (!formData.email) {
+      newErrors.email = 'This field is required';
+    } else if (!formRules.email(formData.email)) {
+      newErrors.email = 'Invalid email address.';
+    }
+    if (!formData.phoneNo) {
+      newErrors.phoneNo = 'This field is required';
+    } else if (!formRules.mobileNo(formData.phoneNo)) {
+      newErrors.phoneNo = 'Mobile number must be a 10-digit number.';
+    }
+    if (!formData.address) newErrors.address = 'This field is required';
 
-  if (!formData.newPassword) {
-    newErrors.newPassword = 'This field is required';
-  } else if (!formRules.password(formData.newPassword)) {
-    newErrors.newPassword = 'Password must be at least 8 characters long, and include uppercase, lowercase, number, and special character.';
-  }
+    if (!formData.newPassword) {
+      newErrors.newPassword = 'This field is required';
+    } else if (!formRules.password(formData.newPassword)) {
+      newErrors.newPassword = 'Password must be at least 8 characters long, and include uppercase, lowercase, number, and special character.';
+    }
 
-  if (!formData.confirmPassword) {
-    newErrors.confirmPassword = 'This field is required';
-  } else if (formData.confirmPassword !== formData.newPassword) {
-    newErrors.confirmPassword = 'Passwords do not match.';
-  }
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = 'This field is required';
+    } else if (formData.confirmPassword !== formData.newPassword) {
+      newErrors.confirmPassword = 'Passwords do not match.';
+    }
 
 
 
@@ -111,16 +111,16 @@ const RegistrationForm = () => {
   };
 
   return (
-    <div className="bg-white flex justify-center items-center min-h-screen p-20">
-      <div className="w-[80%] md:w-[50%] lg:w-[40%] p-8 shadow-lg border border-gray-200 rounded-md bg-gray-50">
+    <div className="bg-white shadow-lg rounded-md min-h-screen p-5">
+      <div className="w-full p-8">
         <div className="text-center mb-4">
-          <img src={logo} alt="Fillcart" className="mx-auto w-12 h-12 mb-1" />
+          <img src={logo} alt="Fillcart" className="mx-auto w-24 mb-1" />
           <h2 className="text-3xl font-bold text-gray-800">Registration Form</h2>
         </div>
         <p className="text-sm text-gray-600 text-center mb-8">
           Please enter your details to register.
         </p>
-        <form className="w-[80%] mx-auto">
+        <form className="w-full mx-auto">
           <div className="mb-4">
             <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">Full Name</label>
             <input
