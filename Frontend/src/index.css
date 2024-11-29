@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+    width: 0px;
+    background-color: rgb(237, 85, 96);
+    border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(183, 183, 183);
+    border-radius: 12px;
+}
+
+body {
+    /* overflow-x: hidden; */
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}

@@ -1,0 +1,45 @@
+.footer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}
+
+.top{
+    display: flex;
+    align-items:flex-start;
+    
+    
+    
+    
+}
+
+.footer-menu{
+    
+    list-style: none;
+    gap: 40px;
+}
+
+.social-icons{
+    display: flex;
+    gap: 20px;
+}
+.social-icons img{
+    height: 30px;
+    width: 30px;
+    
+}
+
+.footer-line{
+    height: 2px;
+    background: black;
+    width: 90%;
+}
+
+@media (max-width:768px){
+    .footer-menu{
+        flex-direction: column;
+        text-align: center;
+    }
+}
