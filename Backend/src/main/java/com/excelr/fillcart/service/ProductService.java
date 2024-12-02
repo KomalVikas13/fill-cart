@@ -95,6 +95,7 @@ public class ProductService {
         existingProduct.setPrice(dto.getPrice());
         existingProduct.setStock(dto.getStock());
         existingProduct.setRating(0);
+        existingProduct.setNumberOfRatings(0L);
         existingProduct.setCreatedAt(existingProduct.getCreatedAt());
         Product savedProduct = productRepository.save(existingProduct);
         String imageResponse = productImageService.addProductImage(dto.getImages(), savedProduct);
