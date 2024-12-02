@@ -32,6 +32,7 @@ public class Product {
     private int stock;
 
     private double rating;
+    private Long numberOfRatings;
 
     private LocalDateTime createdAt;
 

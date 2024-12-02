@@ -52,8 +52,8 @@ public class PaymentService {
         // Create session
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl("http://localhost:8080/payments/success?session_id={CHECKOUT_SESSION_ID}")
-                .setCancelUrl("http://localhost:8080/payments/cancel")
+                .setSuccessUrl("http://localhost:5173/payments/success?session_id={CHECKOUT_SESSION_ID}")
+                .setCancelUrl("http://localhost:5173/payments/cancel")
                 .addAllLineItem(List.of(lineItems))
                 .putMetadata("order_id", String.valueOf(order.getOrderId()))  // Set order_id in metadata
                 .build();

@@ -18,7 +18,7 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
     @Column(nullable = false)
-    private int rating;
+    private double rating;
     @Column(nullable = false)
     private String comment;
     private LocalDateTime createdAt;
