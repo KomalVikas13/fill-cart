@@ -1,11 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import Orders from "./Orders";
+import axios from "axios";
 
 const UserProfile = () => {
     const [activeTab, setActiveTab] = useState("Profile");
     const { profile } = useSelector(state => state.users);
+    const { jwtToken } = useAuth()
+    const [orders, setOrders] = useState([])
 
+    const fetchOrders = async () => {
+        try {
+            const response = await axios.get(
+                `http://localhost:8080/user/order/${profile.user.userId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${jwtToken}`, // Adjust token retrieval as necessary
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            console.log(response.data)
+            setOrders(response.data);
+        } catch (error) {
+            console.error("Error fetching orders:", error);
+        }
+    };
+
+    useEffect(()=>{
+        fetchOrders()
+    },[])
 
     const renderTabContent = () => {
         console.log(profile.user);
@@ -45,7 +71,7 @@ const UserProfile = () => {
                 return (
                     <div className="p-6">
                         <h3 className="text-lg font-semibold mb-4 text-gray-700">Order History</h3>
-                        <p className="text-gray-500">No orders yet.</p>
+                        <Orders orders={orders} />
                     </div>
                 );
 
