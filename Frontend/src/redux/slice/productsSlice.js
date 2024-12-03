@@ -42,7 +42,6 @@ const productsSlice = createSlice({
             .addCase(fetchProducts.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.products = action.payload; // Store all products
-                // Initially filter based on the current category (default 'All')
                 state.filteredProducts = state.products;
             })
             .addCase(fetchProducts.rejected, (state, action) => {
