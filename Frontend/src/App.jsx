@@ -14,6 +14,7 @@ import Unauthorized from './components/401'
 import ShoppingCart from './pages/ShoppingCart'
 import AllProducts from './components/AllProducts'
 import ProductDetailsPage from './components/ProductPage'
+import UserProfile from './components/UserProfile'
 
 function AppRoutes() {
   const { isAuthenticated, role } = useAuth();
@@ -26,6 +27,7 @@ function AppRoutes() {
       <Route path='/cart' element={<ShoppingCart />}></Route>
       <Route path='/all_products' element={<AllProducts />}></Route>
       <Route path='/product_detail' element={<ProductDetailsPage />}></Route>
+      <Route path='/userProfile' element={<UserProfile></UserProfile>}></Route>
       {
         isAuthenticated && (
           <>
@@ -34,8 +36,7 @@ function AppRoutes() {
                 <>
                   <Route path='/adminPortal' element={<AdminPortal></AdminPortal>}></Route>
                   <Route path='/addProduct' element={<AddProduct></AddProduct>}></Route>
-                  <Route path='/addCategory' element={<AddCategory></AddCategory>}></Route>
-                </>
+                  <Route path='/addCategory' element={<AddCategory></AddCategory>}></Route>                </>
               )
             }
           </>
