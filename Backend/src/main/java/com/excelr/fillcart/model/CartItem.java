@@ -1,6 +1,7 @@
 package com.excelr.fillcart.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class CartItem {
     @Column(nullable = false)
     private int quantity;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
