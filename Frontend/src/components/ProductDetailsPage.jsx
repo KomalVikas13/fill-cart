@@ -1,6 +1,12 @@
 import React, { useState } from "react";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 const ProductDetailsPage = () => {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    console.log(queryParams.get('id'), "hhh");
+
+
     const [images, setImages] = useState({
         img1: "https://m.media-amazon.com/images/I/61Pc70HxWpL.SY695.jpg",
         img2: "https://m.media-amazon.com/images/I/81AUPWGLSWL.SY675.jpg",

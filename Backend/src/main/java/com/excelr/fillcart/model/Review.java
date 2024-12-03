@@ -24,7 +24,6 @@ public class Review {
     private String comment;
     private LocalDateTime createdAt;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
