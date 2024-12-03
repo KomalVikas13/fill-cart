@@ -1,77 +1,55 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
 import axios from 'axios';
-// Async thunk for fetching products
+
+// Initial state
+const initialState = {
+    products: [], // This will store all products
+    filteredProducts: [], // This will store the filtered products based on the selected category
+    status: 'idle',
+    error: null,
+};
+
+// Async thunk for fetching all products
 export const fetchProducts = createAsyncThunk(
     'products/fetchProducts',
     async () => {
-        const response = await axios.get('/api/products'); // Replace with your API endpoint
-        return response.data;
+        const response = await axios.post('http://localhost:8080/public/products', { page: 0, size: 8 });
+        return response.data.content; // Assuming this contains all products
     }
 );
 
-// Async thunk to fetch products by category
-export const fetchProductsByCategory = createAsyncThunk(
-    'products/fetchProductsByCategory',
-    async (category) => {
-        const response = await axios.get(`/api/products?category=${category}`); // Replace with your API endpoint
-        return response.data;
-    }
-);
+// Redux slice
 const productsSlice = createSlice({
     name: 'products',
-    initialState: {
-        products: [],
-        currentCategory: 'All',
-        status: 'idle',
-        error: null,
-    },
+    initialState,
     reducers: {
-        addProduct: (state, action) => {
-            state.products.push(action.payload)
-        },
-        removeProduct: (state, action) => {
-            state.products = state.products.filter(
-                (product) => product.id !== action.payload
-            );
-        },
-        updateProduct: (state, action) => {
-            const index = state.products.indexOf(product => product.id == action.payload.id);
-            if (index !== -1) {
-                state.products[index] = action.payload;
-            }
-        },
         setCategory: (state, action) => {
-            state.currentCategory = action.payload;
+            const category = action.payload;
+            if (category === 'All') {
+                state.filteredProducts = state.products; // Show all products if category is 'All'
+            } else {
+                state.filteredProducts = state.products.filter(
+                    (product) => product.category === category
+                );
+            }
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchProducts.pending, (state) => {
-            state.status = 'loading';
-        }).addCase(fetchProducts.fulfilled, (state, action) => {
-            state.status = 'succeeded';
-            state.products = action.payload;
-        }).addCase(fetchProducts.rejected, (state, action) => {
-            state.status = 'failed';
-            state.error = action.error.message;
-            // For fetching products by category
-        }).addCase(fetchProductsByCategory.pending, (state) => {
-            state.status = 'loading';
-        })
-            .addCase(fetchProductsByCategory.fulfilled, (state, action) => {
+        builder
+            .addCase(fetchProducts.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchProducts.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.products = action.payload;
-            }).addCase(fetchProductsByCategory.rejected, (state, action) => {
+                state.products = action.payload; // Store all products
+                state.filteredProducts = state.products;
+            })
+            .addCase(fetchProducts.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
             });
-
-
     },
+});
 
-},
-
-)
-
-export const { addProduct, removeProduct, updateProduct, setCategory } = productsSlice.actions;
+export const { setCategory } = productsSlice.actions;
 export default productsSlice.reducer;
