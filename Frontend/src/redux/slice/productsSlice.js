@@ -3,8 +3,8 @@ import axios from 'axios';
 
 // Initial state
 const initialState = {
-    products: [], // This will store all products
-    filteredProducts: [], // This will store the filtered products based on the selected category
+    products: [],
+    filteredProducts: [],
     status: 'idle',
     error: null,
 };
@@ -14,8 +14,9 @@ export const fetchProducts = createAsyncThunk(
     'products/fetchProducts',
     async () => {
         const response = await axios.get('http://localhost:8080/public/products');
-        console.log(response.data)
-        return response.data; // Assuming this contains all products
+        console.log(response.data);
+
+        return response.data;
     }
 );
 
@@ -27,13 +28,19 @@ const productsSlice = createSlice({
         setCategory: (state, action) => {
             const category = action.payload;
             if (category === 'All') {
-                state.filteredProducts = state.products; // Show all products if category is 'All'
+                state.filteredProducts = state.products;
             } else {
                 state.filteredProducts = state.products.filter(
                     (product) => product.category.name === category
                 );
             }
         },
+        filterProductById: (state, action) => {
+            const productId = action.payload;
+            state.filteredProducts = state.products.filter(
+                (product) => product.productId === productId
+            );
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -42,8 +49,8 @@ const productsSlice = createSlice({
             })
             .addCase(fetchProducts.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.products = action.payload; // Store all products
-                state.filteredProducts = state.products;
+                state.products = action.payload;
+                state.filteredProducts = action.payload; // Set all products to filteredProducts initially
             })
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.status = 'failed';
@@ -52,5 +59,5 @@ const productsSlice = createSlice({
     },
 });
 
-export const { setCategory } = productsSlice.actions;
+export const { setCategory, filterProductById } = productsSlice.actions;
 export default productsSlice.reducer;
