@@ -34,6 +34,20 @@ public class ProductController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<?> getAllProducts(){
+        try{
+            List<Product> response = productService.getAllProducts();
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(response);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+    }
+
     @GetMapping("/{categoryId}")
     public ResponseEntity<?> getProductsByCategory(@PathVariable Long categoryId){
         try {
