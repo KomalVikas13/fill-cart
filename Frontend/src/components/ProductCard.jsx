@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function ProductCard({ product }) {
     return (
         <div>
-            <Link to='/product_detail' className="relative overflow-hidden group">
+            <Link to={`/product_detail?id=${product.productId}`} className="relative overflow-hidden group">
                 {/* Image with hover translate effect */}
                 <img
                     src={product.images[0].imageUrl}
@@ -20,7 +20,7 @@ function ProductCard({ product }) {
             {/* Product details */}
             <h3 className="pt-2 text-md font-bold text-gray-700">{product.name}</h3>
             <p className="font-medium pt-1">Rs. {product.price}</p>
-        </div>
+        </div >
     );
 }
 
