@@ -114,4 +114,8 @@ public class ProductService {
 
         return response;
     }
+
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
 }

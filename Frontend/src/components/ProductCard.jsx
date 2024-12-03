@@ -7,7 +7,7 @@ function ProductCard({ product }) {
             <Link to='/product_detail' className="relative overflow-hidden group">
                 {/* Image with hover translate effect */}
                 <img
-                    src={product.image[0].imageUrl}
+                    src={product.images[0].imageUrl}
                     alt={product.name}
                 />
                 {/* Button container */}

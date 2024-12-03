@@ -13,8 +13,9 @@ const initialState = {
 export const fetchProducts = createAsyncThunk(
     'products/fetchProducts',
     async () => {
-        const response = await axios.post('http://localhost:8080/public/products', { page: 0, size: 8 });
-        return response.data.content; // Assuming this contains all products
+        const response = await axios.get('http://localhost:8080/public/products');
+        console.log(response.data)
+        return response.data; // Assuming this contains all products
     }
 );
 
@@ -29,7 +30,7 @@ const productsSlice = createSlice({
                 state.filteredProducts = state.products; // Show all products if category is 'All'
             } else {
                 state.filteredProducts = state.products.filter(
-                    (product) => product.category === category
+                    (product) => product.category.name === category
                 );
             }
         },
