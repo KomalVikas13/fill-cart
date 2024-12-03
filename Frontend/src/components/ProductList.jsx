@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
-import axios from "axios";
+// import axios from "axios";
+import { useDispatch, useSelector } from 'react-redux';
+
 import { Link } from 'react-router-dom';
+import { fetchProducts } from "../redux/slice/productsSlice";
 
 const ProductList = () => {
-    const [products, setProducts] = useState([])
+    const dispatch = useDispatch();
+    const { products } = useSelector((state) => state.products);
+
+    // const [products, setProducts] = useState([]);
+
     const getProductList = async () => {
-        const response = await axios.post(`http://localhost:8080/public/products`, { page: 0, size: 8 })
-        setProducts(response.data.content)
+        dispatch(fetchProducts());
+
+        // const response = await axios.post(`http://localhost:8080/public/products`, { page: 0, size: 8 })
+        // setProducts(response.data.content)
     }
 
     useEffect(() => {

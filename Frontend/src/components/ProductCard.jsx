@@ -1,9 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function ProductCard({ product }) {
     return (
         <div>
-            <div className="relative overflow-hidden group">
+            <Link to='/product_detail' className="relative overflow-hidden group">
                 {/* Image with hover translate effect */}
                 <img
                     src={product.image[0].imageUrl}
@@ -15,10 +16,10 @@ function ProductCard({ product }) {
                         Add To Cart
                     </button>
                 </div>
-            </div>
+            </Link>
             {/* Product details */}
             <h3 className="pt-2 text-md font-bold text-gray-700">{product.name}</h3>
-            <p className="font-medium pt-1">${product.price}</p>
+            <p className="font-medium pt-1">Rs. {product.price}</p>
         </div>
     );
 }
