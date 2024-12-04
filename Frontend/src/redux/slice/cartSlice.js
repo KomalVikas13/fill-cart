@@ -1,66 +1,155 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const initialState = {
     items: [],
     totalAmount: 0,
     totalQuantity: 0,
+    status: 'idle', // For tracking API calls (idle, loading, succeeded, failed)
+    error: null,    // For tracking errors
 };
 
+// **Async Thunks for API Integration**
+export const fetchCart = createAsyncThunk('cart/fetchCart', async (data, { rejectWithValue }) => {
+    console.log(data);
+    try {
+        const response = await axios.get(`http://localhost:8080/user/cart/${data.userId}`, {
+            headers: { Authorization: `Bearer ${data.token}` },
+            withCredentials: true
+        });
+        console.log(response);
+
+        return response.data; // Return cart items from the database
+    } catch (error) {
+        return rejectWithValue(error.response.data);
+    }
+});
+
+export const addToCart = createAsyncThunk(
+    'cart/addToCart',
+    async (data, { rejectWithValue }) => {
+        try {
+            console.log(data);
+
+            const response = await axios.post('http://localhost:8080/user/cart', data.cart, {
+                headers: { Authorization: `Bearer ${data.token}` },
+                withCredentials: true
+            });
+            return response.data; // Return the response data (updated cart details)
+        } catch (error) {
+            return rejectWithValue(error.response.data); // Handle errors
+        }
+    }
+);
+
+
+export const removeFromCart = createAsyncThunk('cart/removeFromCart', async (itemId, { rejectWithValue }) => {
+    try {
+        await axios.delete(`localhost:8080/user/cart/${itemId}`);
+        return itemId; // Return the ID of the removed item
+    } catch (error) {
+        return rejectWithValue(error.response.data);
+    }
+});
+
+export const updateCartQuantity = createAsyncThunk('cart/updateCartQuantity', async (data, { rejectWithValue }) => {
+    try {
+        const response = await axios.post('http://localhost:8080/user/cart', data.cart, {
+            headers: { Authorization: `Bearer ${data.token}` },
+            withCredentials: true
+        });
+        return response.data;
+    } catch (error) {
+        return rejectWithValue(error.response.data);
+    }
+});
+
+// **Slice Definition**
 const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
-        addToCart(state, action) {
-            const newItem = action.payload;
-            const existingItem = state.items.find(item => item.id === newItem.id);
-
-            if (existingItem) {
-                // Update quantity if item already exists in the cart
-                existingItem.quantity += newItem.quantity;
-            } else {
-                // Add new item to the cart
-                state.items.push({
-                    ...newItem,
-                    quantity: newItem.quantity,
-                });
-            }
-
-            // Recalculate total quantity and total amount
-            state.totalQuantity = state.items.reduce((total, item) => total + item.quantity, 0);
-            state.totalAmount = state.items.reduce((total, item) => total + item.price * item.quantity, 0);
-        },
-        removeFromCart(state, action) {
-            const itemId = action.payload;
-
-            // Remove item from cart
-            state.items = state.items.filter(item => item.id !== itemId);
-
-            // Recalculate total quantity and total amount
-            state.totalQuantity = state.items.reduce((total, item) => total + item.quantity, 0);
-            state.totalAmount = state.items.reduce((total, item) => total + item.price * item.quantity, 0);
-        },
-        updateQuantity(state, action) {
-            const { id, quantity } = action.payload;
-            const item = state.items.find(item => item.id === id);
-
-            if (item) {
-                item.quantity = quantity;
-            }
-
-            // Recalculate total quantity and total amount
-            state.totalQuantity = state.items.reduce((total, item) => total + item.quantity, 0);
-            state.totalAmount = state.items.reduce((total, item) => total + item.price * item.quantity, 0);
+        isAlreadyExists(state, action) {
+            const existingInCart = (state.items).find(item => {
+                console.log(item);
+                return item.product.productId == action.payload
+            });
+            console.log(existingInCart);
         },
         clearCart(state) {
             state.items = [];
             state.totalQuantity = 0;
             state.totalAmount = 0;
-        }
-    }
+        },
+    },
+    extraReducers: (builder) => {
+        builder
+            // **Fetch Cart**
+            .addCase(fetchCart.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchCart.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+
+                // Ensure action.payload has the 'cartItems' array
+                const cartItems = action.payload.cartItems;
+
+                if (Array.isArray(cartItems)) {
+                    state.items = cartItems;
+
+                    // Calculate totalQuantity and totalAmount
+                    state.totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+                    state.totalAmount = cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
+                }
+            })
+            .addCase(fetchCart.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
+            })
+            // **Add to Cart**
+            .addCase(addToCart.fulfilled, (state, action) => {
+                const newItem = action.payload;
+                const existingItem = state.items.find(item => item.id === newItem.id);
+                toast.info("Product Added to the cart!")
+
+                if (existingItem) {
+                    existingItem.quantity += newItem.quantity;
+                } else {
+                    state.items.push(newItem);
+                }
+
+                // Recalculate totals
+                state.totalQuantity = state.items.reduce((total, item) => total + item.quantity, 0);
+                state.totalAmount = state.items.reduce((total, item) => total + item.price * item.quantity, 0);
+            })
+            // **Remove from Cart**
+            .addCase(removeFromCart.fulfilled, (state, action) => {
+                const itemId = action.payload;
+                state.items = state.items.filter(item => item.id !== itemId);
+
+                // Recalculate totals
+                state.totalQuantity = state.items.reduce((total, item) => total + item.quantity, 0);
+                state.totalAmount = state.items.reduce((total, item) => total + item.price * item.quantity, 0);
+            })
+            // **Update Quantity**
+            .addCase(updateCartQuantity.fulfilled, (state, action) => {
+                const { id, quantity } = action.payload;
+                const item = state.items.find(item => item.id === id);
+
+                if (item) {
+                    item.quantity = quantity;
+                }
+
+                // Recalculate totals
+                state.totalQuantity = state.items.reduce((total, item) => total + item.quantity, 0);
+                state.totalAmount = state.items.reduce((total, item) => total + item.price * item.quantity, 0);
+            });
+    },
 });
 
-// Export actions to dispatch
-export const { addToCart, removeFromCart, updateQuantity, clearCart } = cartSlice.actions;
+// **Export Actions**
+export const { clearCart, isAlreadyExists } = cartSlice.actions;
 
-// Export the reducer to be used in the store
+// **Export Reducer**
 export default cartSlice.reducer;

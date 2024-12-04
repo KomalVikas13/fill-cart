@@ -1,26 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, filterProductById } from "../redux/slice/productsSlice";
-import { addToCart, updateQuantity } from "../redux/slice/cartSlice";
+import { addToCart, fetchCart, updateCartQuantity } from "../redux/slice/cartSlice";
 
 const ProductDetailsPage = () => {
     const dispatch = useDispatch();
     const filteredProducts = useSelector(state => state.products.filteredProducts);
+    const { profile } = useSelector(state => state.users);
+    const { items } = useSelector(state => state.cart);
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const productId = queryParams.get('id');
-
-    useEffect(() => {
-        dispatch(fetchProducts());
-    }, [dispatch]);
-
-    useEffect(() => {
-        if (productId) {
-            dispatch(filterProductById(productId));
-        }
-    }, [dispatch, productId]);
 
     const [images, setImages] = useState([]);
     const [activeImg, setActiveImage] = useState(null);
@@ -28,9 +20,35 @@ const ProductDetailsPage = () => {
     const [reviews, setReviews] = useState(null);
     const [msg, setMsg] = useState(null);
     const [totalPrice, setTotalPrice] = useState(0); // Default to 0
+    const [alreadyExists, setAlreadyExists] = useState(null); // State to store the 'alreadyExists' product
+
+    useEffect(() => {
+        if (productId) {
+            dispatch(fetchProducts()).then(() => {
+                dispatch(filterProductById(productId)); // Only filter after products are fetched
+            });
+
+        }
+    }, [dispatch, productId]);
+
+
+
+
 
     // Ensure product exists before rendering component content
     const product = filteredProducts.length > 0 ? filteredProducts[0] : null;
+
+
+
+    useEffect(() => {
+        if (product) {
+            const alreadyExists = items.length > 0 ? items.find(item => item.product.productId == productId) : null;
+            setAlreadyExists(alreadyExists);  // Set the state here to be used later in JSX
+            if (alreadyExists) {
+                setAmount(alreadyExists.quantity);  // Set the amount to the existing quantity in the cart
+            }
+        }
+    }, [productId, items, product]);
 
     useEffect(() => {
         if (product) {
@@ -57,25 +75,41 @@ const ProductDetailsPage = () => {
             setMsg(null);
             if (currentAmount < currentStock) {
                 setAmount(currentAmount + 1);
-
             } else {
                 setMsg("Out of Stock");
             }
         }
-        dispatch(updateQuantity({ id: productId, currentAmount }));
+        if (currentAmount !== amount) {
+            dispatch(addProductToCart({ id: productId, currentAmount }));
+        }
     };
 
     const addProductToCart = () => {
-        const productToCart = {
-            id: productId,
-            name: product.name,
-            price: totalPrice,
-            quantity: amount,
+        console.log("hi");
+
+        // Build the cart payload dynamically
+        const cartPayload = {
+            cart: {
+                userId: profile.user.userId, // Get from Redux state
+                cartItemRequestList: [
+                    {
+                        productId: productId, // Current product ID
+                        quantity: amount, // Current quantity
+                    },
+                    // Example for multiple items (optional, based on user requirements)
+                    // {
+                    //     productId: 13,
+                    //     quantity: 4,
+                    // },
+                ],
+            },
+            token: profile.token
         };
+        console.log(cartPayload);
 
-        dispatch(addToCart(productToCart));
-    }
-
+        // Dispatch addToCart action with the constructed payload
+        dispatch(addToCart(cartPayload));
+    };
 
     return (
         <>
@@ -134,10 +168,15 @@ const ProductDetailsPage = () => {
                             </div>
                             {msg ? <span className="text-theme">Out Of Stock</span> : (
                                 <div className="flex gap-2">
-                                    <button className="bg-[#fd6b68] text-white font-semibold py-3 px-16 rounded-xl hover:bg-[#e85b5a]"
-                                        onClick={addProductToCart}>
-                                        Add to Cart
-                                    </button>
+                                    {alreadyExists ? (
+                                        <Link to='/cart' className="bg-[#fd6b68] text-white font-semibold py-3 px-16 rounded-xl hover:bg-[#e85b5a]">
+                                            Go to Cart
+                                        </Link>
+                                    ) : (
+                                        <button className="bg-[#fd6b68] text-white font-semibold py-3 px-16 rounded-xl hover:bg-[#e85b5a]" onClick={addProductToCart}>
+                                            Add to Cart
+                                        </button>
+                                    )}
                                     <button className="bg-black text-white font-semibold py-3 px-16 rounded-xl hover:bg-[#e85b5a]">
                                         Buy Now
                                     </button>
