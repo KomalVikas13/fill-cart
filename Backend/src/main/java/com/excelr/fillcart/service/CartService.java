@@ -1,5 +1,6 @@
 package com.excelr.fillcart.service;
 
+import com.excelr.fillcart.dto.CartItemDeleteRequest;
 import com.excelr.fillcart.dto.CartRequest;
 import com.excelr.fillcart.model.Cart;
 import com.excelr.fillcart.model.User;
@@ -55,4 +56,5 @@ public class CartService {
         return cartRepository.findByUser_UserId(userId)
                  .orElseThrow(()->new EntityNotFoundException("Cart not found"));
     }
+
 }

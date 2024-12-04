@@ -1,5 +1,6 @@
 package com.excelr.fillcart.service;
 
+import com.excelr.fillcart.dto.CartItemDeleteRequest;
 import com.excelr.fillcart.dto.CartItemRequest;
 import com.excelr.fillcart.model.Cart;
 import com.excelr.fillcart.model.CartItem;
@@ -36,5 +37,14 @@ public class CartItemService {
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+
+    public String removeCartItems(CartItemDeleteRequest cartRequest) {
+        cartRequest.getCartItemIds().stream().forEach(id -> {
+            cartItemRepository.deleteById(id);
+        });
+
+        return "deleted";
     }
 }
