@@ -19,24 +19,41 @@ const PlaceOrder = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
+        // If there's a productId, fetch the products and then filter by the productId
         if (productId) {
             dispatch(fetchProducts()).then(() => {
                 dispatch(filterProductById(productId)); // Only filter after products are fetched
             });
-        }
-        else {
+        } else {
+            // Handle the case where there's no productId, and get the cart items
             const transformedOrders = cart.items.map((item, index) => ({
                 id: index + 1, // Generate a unique ID for each order
                 productId: item.product.productId,
                 productName: item.product.name,
                 quantity: item.quantity,
                 price: item.product.price,
-                image:item.product.images[0].imageUrl
+                image: item.product.images[0].imageUrl
             }));
             setOrders(transformedOrders);
         }
-    }, [cart.items, dispatch]);
-    console.log(filterProductById)
+    }, [cart.items, productId, dispatch]);
+
+    // Effect to handle updating orders after filteredProducts is populated
+    useEffect(() => {
+        if (filteredProducts.length > 0) {
+            // When filteredProducts are available, update the orders state
+            const transformedOrders = [{
+                id: 1,
+                productId: filteredProducts[0].productId,
+                productName: filteredProducts[0].name,
+                quantity: 1,
+                price: filteredProducts[0].price,
+                image: filteredProducts[0].images[0].imageUrl
+            }];
+            setOrders(transformedOrders);
+        }
+    }, [filteredProducts]);
+    
     // Handle Quantity Change
     const updateQuantity = (id, delta) => {
         setOrders((prevOrders) =>
@@ -122,7 +139,7 @@ const PlaceOrder = () => {
                                 </div>
                             </div>
                             <div className="text-lg font-medium text-gray-700">
-                                ${(order.quantity * order.price).toFixed(2)}
+                                Rs. {(order.quantity * order.price).toFixed(2)}
                             </div>
                             <button
                                 className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
@@ -137,7 +154,7 @@ const PlaceOrder = () => {
                 {/* Place Order Section */}
                 <div className="fixed bottom-6 right-6">
                     <h3 className="text-xl font-bold mb-4 text-gray-800">
-                        Total: ${orders.reduce((sum, order) => sum + order.quantity * order.price, 0).toFixed(2)}
+                        Total: Rs. {orders.reduce((sum, order) => sum + order.quantity * order.price, 0).toFixed(2)}
                     </h3>
                     <button
                         className="bg-green-600 hover:bg-green-500 text-white font-semibold py-3 px-16 rounded-xl shadow-md"
