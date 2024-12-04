@@ -40,6 +40,7 @@ public class ReviewService {
         review.setRating(reviewRequest.getRating());
         review.setComment(reviewRequest.getComment());
         review.setUser(user);
+        review.setUser(user);
         review.setProduct(product);
         review.setCreatedAt(LocalDateTime.now());
         reviewRepository.save(review);
