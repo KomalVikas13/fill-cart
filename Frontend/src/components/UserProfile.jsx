@@ -86,8 +86,8 @@ const UserProfile = () => {
                 {/* Header */}
                 <div className="bg-theme text-white p-6 flex justify-between items-center">
                     <div className="ml-6">
-                        <h2 className="text-2xl font-bold">John Doe</h2>
-                        <p className="text-sm text-blue-100">johndoe@example.com</p>
+                        <h2 className="text-2xl font-bold">{profile.user.fullName}</h2>
+                        <p className="text-sm text-blue-100">{profile.user.email}</p>
                     </div>
                     <div>
                         <Link to='/' className="bg-white p-2 px-5 text-theme rounded-lg">Home</Link>

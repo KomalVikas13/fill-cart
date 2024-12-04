@@ -17,6 +17,8 @@ import ProductDetailsPage from './components/ProductPage'
 import UserProfile from './components/UserProfile'
 import Orders from './components/Orders'
 import PlaceOrder from './components/PlaceOrder'
+import PaymentSuccess from './components/PaymentSuccess'
+import PaymentFailed from './components/PaymentFailed'
 import ReviewForm from './components/Review'
 
 function AppRoutes() {
@@ -30,20 +32,24 @@ function AppRoutes() {
       <Route path='/cart' element={<ShoppingCart />}></Route>
       <Route path='/all_products' element={<AllProducts />}></Route>
       <Route path='/product_detail' element={<ProductDetailsPage />}></Route>
-
-      <Route path='/placeOrder' element={<PlaceOrder></PlaceOrder>}></Route>
-      {
+      
+      <Route path='/placeOrder/:productId' element={<PlaceOrder></PlaceOrder>}></Route> {
         isAuthenticated && (
           <>
             <Route path='/userProfile' element={<UserProfile></UserProfile>}></Route>
             <Route path='/orders' element={<Orders></Orders>}></Route>
+
+            <Route path='/placeOrder' element={<PlaceOrder></PlaceOrder>}></Route>
+            <Route path='/payments/success' element={<PaymentSuccess></PaymentSuccess>}></Route>
+            <Route path='/payments/cancel' element={<PaymentFailed></PaymentFailed>}></Route>
             <Route path='/review' element={<ReviewForm></ReviewForm>}></Route>
             {
               role === "[ROLE_ADMIN]" && (
                 <>
                   <Route path='/adminPortal' element={<AdminPortal></AdminPortal>}></Route>
                   <Route path='/addProduct' element={<AddProduct></AddProduct>}></Route>
-                  <Route path='/addCategory' element={<AddCategory></AddCategory>}></Route>                </>
+                  <Route path='/addCategory' element={<AddCategory></AddCategory>}></Route>
+                </>
               )
             }
           </>

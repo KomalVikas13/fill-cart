@@ -90,7 +90,6 @@ const ProductDetailsPage = () => {
     };
 
     const addProductToCart = () => {
-        console.log("hi");
 
         // Build the cart payload dynamically
         const cartPayload = {
@@ -182,9 +181,9 @@ const ProductDetailsPage = () => {
                                             Add to Cart
                                         </button>
                                     )}
-                                    <button className="bg-black text-white font-semibold py-3 px-16 rounded-xl hover:bg-[#e85b5a]">
+                                    <Link to={`/placeOrder/${productId}`} className="bg-black text-white font-semibold py-3 px-16 rounded-xl hover:bg-[#e85b5a]">
                                         Buy Now
-                                    </button>
+                                    </Link>
                                 </div>
                             )}
                         </div>

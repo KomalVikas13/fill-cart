@@ -76,7 +76,7 @@ const Orders = ({ orders = [] }) => {
                 {order.orderItems && order.orderItems.map((item) => (
                   <li key={item.orderItemId}>
                     {item.product?.name || 'Unknown Product'} - {item.quantity || 0}x ${(item.price || 0).toFixed(2)}
-                    <Link to={`/review?productId=${item.product?.id}`} className="bg-theme text-white px-5 py-2">Add Review</Link>
+                    <Link to={`/review?productId=${item.product?.productId}`} className="bg-theme text-white px-5 py-2 m-5">Add Review</Link>
                   </li>
                 ))}
               </ul>
