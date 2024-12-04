@@ -22,9 +22,16 @@ const Navbar = () => {
                     <Link className='font-medium font-verdana text-gray-800 hover:text-theme '>All Clothes</Link>
                 </div>
                 <div className='flex gap-5'>
-                    <Link to='/login'>
-                        <BiUser className='text-3xl hover:text-theme' />
-                    </Link>
+                    {
+                        isAuthenticated ? 
+                            <Link to='/userProfile'>
+                                <BiUser className='text-3xl hover:text-theme' />
+                            </Link> :
+                            <Link to='/login'>
+                                <BiUser className='text-3xl hover:text-theme' />
+                            </Link>
+                    }
+                    
                     <Link to='/cart' className='relative'>
                         <BiCart className='text-3xl hover:text-theme' />
                         <div className="absolute bg-black w-5 h-5 flex justify-center items-center text-white rounded-full -top-[12px] -right-2 text-sm">{items?.length || 0}</div>

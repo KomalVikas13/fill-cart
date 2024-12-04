@@ -1,7 +1,9 @@
 package com.excelr.fillcart.controller.user;
 
+import com.excelr.fillcart.dto.CartItemDeleteRequest;
 import com.excelr.fillcart.dto.CartRequest;
 import com.excelr.fillcart.model.Cart;
+import com.excelr.fillcart.service.CartItemService;
 import com.excelr.fillcart.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,9 @@ public class CartController {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private CartItemService cartItemService;
 
     @PostMapping
     public ResponseEntity<String> addToCart(@RequestBody CartRequest cartRequest){
@@ -35,6 +40,20 @@ public class CartController {
     public ResponseEntity<Object> getCart(@PathVariable Long userId){
         try {
             Cart response = cartService.getCart(userId);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(response);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> removeCartItems(@RequestBody CartItemDeleteRequest cartRequest){
+        try{
+            String response = cartItemService.removeCartItems(cartRequest);
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(response);
