@@ -1,14 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Logo from '../assets/FillCartLogo.png'
 import { BiCart, BiUser } from 'react-icons/bi'
 import { FaSignOutAlt } from "react-icons/fa";
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCart } from '../redux/slice/cartSlice';
 
 const Navbar = () => {
     const { isAuthenticated, logout } = useAuth();
+    const dispatch = useDispatch();
     const { items } = useSelector(state => state.cart);
+    const { profile } = useSelector(state => state.users);
+
+    useEffect(() => {
+        dispatch(fetchCart({ userId: profile.user.userId, token: profile.token }));
+    }, [dispatch])
 
     return (
         <div className="bg-white shadow-xl overflow-hidden sticky z-50">

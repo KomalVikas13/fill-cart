@@ -36,9 +36,9 @@ const productsSlice = createSlice({
             }
         },
         filterProductById: (state, action) => {
-            const productId = action.payload;
+            const productId = Number(action.payload);
             state.filteredProducts = state.products.filter(
-                (product) => product.productId === productId
+                (product) => product.productId == productId
             );
         }
     },
