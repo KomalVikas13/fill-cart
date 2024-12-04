@@ -25,8 +25,7 @@ const Navbar = () => {
                 </div>
                 <div className='flex gap-5'>
                     <Link to='/' className='font-medium font-verdana text-gray-800 hover:text-theme'>Home</Link>
-                    <Link className='font-medium font-verdana text-gray-800 hover:text-theme '>Categories</Link>
-                    <Link className='font-medium font-verdana text-gray-800 hover:text-theme '>All Clothes</Link>
+                    <Link to='/all_products' className='font-medium font-verdana text-gray-800 hover:text-theme '>All Clothes</Link>
                 </div>
                 <div className='flex gap-5'>
                     {

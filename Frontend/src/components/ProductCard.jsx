@@ -13,7 +13,7 @@ function ProductCard({ product }) {
                 {/* Button container */}
                 <div className="absolute bottom-5 w-full text-center px-5 translate-y-20 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
                     <button className="bg-black text-white hover:bg-theme py-3 w-[90%] mx-auto">
-                        Add To Cart
+                        View Product
                     </button>
                 </div>
             </Link>
