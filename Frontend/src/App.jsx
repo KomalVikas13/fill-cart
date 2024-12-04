@@ -17,6 +17,7 @@ import ProductDetailsPage from './components/ProductPage'
 import UserProfile from './components/UserProfile'
 import Orders from './components/Orders'
 import PlaceOrder from './components/PlaceOrder'
+import ReviewForm from './components/Review'
 
 function AppRoutes() {
   const { isAuthenticated, role } = useAuth();
@@ -29,13 +30,14 @@ function AppRoutes() {
       <Route path='/cart' element={<ShoppingCart />}></Route>
       <Route path='/all_products' element={<AllProducts />}></Route>
       <Route path='/product_detail' element={<ProductDetailsPage />}></Route>
-      
+
       <Route path='/placeOrder' element={<PlaceOrder></PlaceOrder>}></Route>
       {
         isAuthenticated && (
           <>
             <Route path='/userProfile' element={<UserProfile></UserProfile>}></Route>
             <Route path='/orders' element={<Orders></Orders>}></Route>
+            <Route path='/review' element={<ReviewForm></ReviewForm>}></Route>
             {
               role === "[ROLE_ADMIN]" && (
                 <>
