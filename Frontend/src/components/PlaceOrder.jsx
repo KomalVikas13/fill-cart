@@ -1,33 +1,42 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { fetchProducts, filterProductById } from "../redux/slice/productsSlice.js"
 
 const PlaceOrder = () => {
+    const {filteredProducts} = useSelector(state => state.products);
+    const cart = useSelector(state => state.cart);
+    const { profile } = useSelector(state => state.users);
+    console.log(cart.items)
+    console.log(profile)
     const { jwtToken } = useAuth() 
-    const [orders, setOrders] = useState([
-        { 
-            id: 1, 
-            productId: 9,
-            productName: "New Balance Unisex-Adult 574 Model Sneaker", 
-            quantity: 1,
-            price: 15.55 
-        },
-        { 
-            id: 2, 
-            productId: 10,
-            productName: "New Balanc Model Sneaker", 
-            quantity: 5,
-            price: 25.00 
-        },
-        { 
-            id: 3, 
-            productId: 11,
-            productName: "New Sneaker", 
-            quantity: 6,
-            price: 10.50 
-        }
-    ]);
+    const [orders, setOrders] = useState([]);
+    const navigator = useNavigate()
+    const {productId} = useParams()
+    const dispatch = useDispatch()
 
+    useEffect(() => {
+        if (productId) {
+            dispatch(fetchProducts()).then(() => {
+                dispatch(filterProductById(productId)); // Only filter after products are fetched
+            });
+        }
+        else {
+            const transformedOrders = cart.items.map((item, index) => ({
+                id: index + 1, // Generate a unique ID for each order
+                productId: item.product.productId,
+                productName: item.product.name,
+                quantity: item.quantity,
+                price: item.product.price,
+                image:item.product.images[0].imageUrl
+            }));
+            setOrders(transformedOrders);
+        }
+    }, [cart.items, dispatch]);
+    console.log(filterProductById)
     // Handle Quantity Change
     const updateQuantity = (id, delta) => {
         setOrders((prevOrders) =>
@@ -49,7 +58,7 @@ const PlaceOrder = () => {
         // Prepare order data in the required format
         const orderData = {
             totalAmount: orders.reduce((sum, order) => sum + order.quantity * order.price, 0),
-            userId: 4, // Hard-coded user ID as per your requirement
+            userId: profile.user.userId,
             orderItems: orders.map(order => ({
                 productId: order.productId,
                 quantity: order.quantity,
@@ -66,10 +75,12 @@ const PlaceOrder = () => {
                     "Content-Type": "application/json",
                 }
             })
+            window.open(response.data.paymentUrl)
+            console.log(response)
         } catch (error) {
-            
+            console.log(error)
+            toast.error(error.response.data)
         }
-        setOrders([]); // Clear the cart
     };
 
     return (
@@ -88,7 +99,7 @@ const PlaceOrder = () => {
                             className="flex items-center gap-6 p-4 bg-white shadow-md rounded-lg hover:shadow-lg transition-shadow duration-300"
                         >
                             <img
-                                src="https://m.media-amazon.com/images/I/61Pc70HxWpL.SY695.jpg"
+                                src={order.image}
                                 alt={order.productName}
                                 className="w-24 h-24 object-cover rounded-lg"
                             />

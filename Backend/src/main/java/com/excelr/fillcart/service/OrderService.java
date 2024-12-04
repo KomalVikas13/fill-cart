@@ -1,10 +1,13 @@
 package com.excelr.fillcart.service;
 
 import com.excelr.fillcart.dto.OrderDto;
+import com.excelr.fillcart.dto.OrderItemDto;
 import com.excelr.fillcart.dto.PaymentResponse;
 import com.excelr.fillcart.model.Order;
+import com.excelr.fillcart.model.Product;
 import com.excelr.fillcart.model.User;
 import com.excelr.fillcart.repository.OrderRepository;
+import com.excelr.fillcart.repository.ProductRepository;
 import com.excelr.fillcart.repository.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +33,19 @@ public class OrderService {
     @Autowired
     private PaymentService paymentService;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     @Transactional
     public PaymentResponse placeOrder(OrderDto dto) {
         // Fetch user
         Optional<User> userOpt = userRepo.findById(dto.getUserId());
         if (userOpt.isEmpty()) {
             throw new RuntimeException("User not found to place order");
+        }
+        boolean isStockAvailable = validateStockAvailability(dto.getOrderItems());
+        if (!isStockAvailable) {
+            throw new RuntimeException("Insufficient stock for one or more items");
         }
 
         // Create Order entity
@@ -65,6 +75,18 @@ public class OrderService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to initiate payment: " + e.getMessage(), e);
         }
+    }
+    private boolean validateStockAvailability(List<OrderItemDto> orderItems) {
+        for (OrderItemDto item : orderItems) {
+            // Assuming you have a method in ProductRepository to check stock
+            Product product = productRepository.findById(item.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+
+            if (product.getStock() < item.getQuantity()) {
+                return false; // Insufficient stock
+            }
+        }
+        return true;
     }
 
     public List<Order> getOrders(Long userId) {

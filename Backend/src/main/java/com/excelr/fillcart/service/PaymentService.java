@@ -103,7 +103,7 @@ public class PaymentService {
                 // Save the payment in the database
                 paymentRepository.save(payment);
 
-                return "Payment successful. Order status updated, stock reduced, and payment recorded.";
+                return "Payment successful.";
             } else {
                 return "Payment failed.";
             }
