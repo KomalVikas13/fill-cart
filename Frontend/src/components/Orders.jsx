@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import ReviewForm from "./Review";
+import { Link } from "react-router-dom";
 
-const Orders = ({orders = []}) => {
+const Orders = ({ orders = [] }) => {
   const [currentPage, setCurrentPage] = useState(0);
 
-  const ordersPerPage = 3; 
+  const ordersPerPage = 3;
 
   // Pagination logic
   const pageCount = Math.ceil(orders.length / ordersPerPage);
@@ -24,6 +26,7 @@ const Orders = ({orders = []}) => {
           <h1 className="text-3xl font-bold text-gray-800 mb-4">No Orders Found</h1>
           <p className="text-gray-600">You haven't placed any orders yet.</p>
         </div>
+
       </div>
     );
   }
@@ -49,13 +52,12 @@ const Orders = ({orders = []}) => {
                 <p className="text-sm text-gray-500">
                   Status:{" "}
                   <span
-                    className={`font-semibold ${
-                      order.orderStatus === "PAID"
-                        ? "text-green-500"
-                        : order.orderStatus === "PENDING"
+                    className={`font-semibold ${order.orderStatus === "PAID"
+                      ? "text-green-500"
+                      : order.orderStatus === "PENDING"
                         ? "text-yellow-500"
                         : "text-red-500"
-                    }`}
+                      }`}
                   >
                     {order.orderStatus || 'Unknown'}
                   </span>
@@ -74,10 +76,12 @@ const Orders = ({orders = []}) => {
                 {order.orderItems && order.orderItems.map((item) => (
                   <li key={item.orderItemId}>
                     {item.product?.name || 'Unknown Product'} - {item.quantity || 0}x ${(item.price || 0).toFixed(2)}
+                    <Link to={`/review?productId=${item.product?.id}`} className="bg-theme text-white px-5 py-2">Add Review</Link>
                   </li>
                 ))}
               </ul>
             </div>
+            {/* Review */}
           </div>
         ))}
       </div>
@@ -87,7 +91,7 @@ const Orders = ({orders = []}) => {
         {pageCount > 1 && (
           <>
             {currentPage > 0 && (
-              <button 
+              <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 className="px-3 py-1 border border-gray-300 rounded hover:bg-blue-100"
               >
@@ -99,18 +103,17 @@ const Orders = ({orders = []}) => {
               <button
                 key={idx}
                 onClick={() => handlePageChange(idx)}
-                className={`px-3 py-1 border rounded ${
-                  currentPage === idx 
-                    ? "bg-blue-500 text-white" 
-                    : "border-gray-300 hover:bg-blue-100"
-                }`}
+                className={`px-3 py-1 border rounded ${currentPage === idx
+                  ? "bg-blue-500 text-white"
+                  : "border-gray-300 hover:bg-blue-100"
+                  }`}
               >
                 {idx + 1}
               </button>
             ))}
 
             {currentPage < pageCount - 1 && (
-              <button 
+              <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 className="px-3 py-1 border border-gray-300 rounded hover:bg-blue-100"
               >
