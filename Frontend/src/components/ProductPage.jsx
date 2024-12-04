@@ -42,13 +42,18 @@ const ProductDetailsPage = () => {
 
     useEffect(() => {
         if (product) {
-            const alreadyExists = items.length > 0 ? items.find(item => item.product.productId == productId) : null;
-            setAlreadyExists(alreadyExists);  // Set the state here to be used later in JSX
+            console.log("Items in cart:", items); // Debugging log
+            // Ensure items is an array and filter out invalid entries before calling find
+            const validItems = Array.isArray(items) ? items.filter(item => item && item.product) : [];
+            const alreadyExists = validItems.find(item => item.product.productId === productId);
+
+            setAlreadyExists(alreadyExists); // Set the state here to be used later in JSX
             if (alreadyExists) {
-                setAmount(alreadyExists.quantity);  // Set the amount to the existing quantity in the cart
+                setAmount(alreadyExists.quantity); // Set the amount to the existing quantity in the cart
             }
         }
     }, [productId, items, product]);
+
 
     useEffect(() => {
         if (product) {

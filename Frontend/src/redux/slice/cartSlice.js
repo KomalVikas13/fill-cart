@@ -43,15 +43,25 @@ export const addToCart = createAsyncThunk(
     }
 );
 
+export const removeFromCart = createAsyncThunk('cart/removeFromCart', async (data, { rejectWithValue }) => {
 
-export const removeFromCart = createAsyncThunk('cart/removeFromCart', async (itemId, { rejectWithValue }) => {
     try {
-        await axios.delete(`localhost:8080/user/cart/${itemId}`);
-        return itemId; // Return the ID of the removed item
+        const response = await axios.delete(
+            'http://localhost:8080/user/cart',
+            {
+                headers: { Authorization: `Bearer ${data.token}` },
+                withCredentials: true,
+                data: { cartItemIds: [data.cartId] } // Ensure this matches the backend model
+            }
+        );
+        console.log(response);
+        return response.data
+
     } catch (error) {
-        return rejectWithValue(error.response.data);
+        return rejectWithValue(error.response.data); // Handle errors
     }
 });
+
 
 export const updateCartQuantity = createAsyncThunk('cart/updateCartQuantity', async (data, { rejectWithValue }) => {
     try {
@@ -127,10 +137,12 @@ const cartSlice = createSlice({
             .addCase(removeFromCart.fulfilled, (state, action) => {
                 const itemId = action.payload;
                 state.items = state.items.filter(item => item.id !== itemId);
-
                 // Recalculate totals
                 state.totalQuantity = state.items.reduce((total, item) => total + item.quantity, 0);
                 state.totalAmount = state.items.reduce((total, item) => total + item.price * item.quantity, 0);
+
+                toast.success('Item removed from the cart!');
+                window.location.href = '/cart';
             })
             // **Update Quantity**
             .addCase(updateCartQuantity.fulfilled, (state, action) => {
@@ -149,7 +161,7 @@ const cartSlice = createSlice({
 });
 
 // **Export Actions**
-export const { clearCart, isAlreadyExists } = cartSlice.actions;
+export const { isAlreadyExists } = cartSlice.actions;
 
 // **Export Reducer**
 export default cartSlice.reducer;
