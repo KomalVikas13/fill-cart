@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux';
 import { fetchProducts } from '../../redux/slice/productsSlice';
+import { Link } from 'react-router-dom';
 
 const AllProductList = () => {
     const { products, status } = useSelector(state => state.products);
@@ -19,6 +20,9 @@ const AllProductList = () => {
         <div className='flex justify-center flex-col items-center p-10'>
             <h1 className='text-3xl font-bold text-theme'>All Products</h1>
             <div className="py-10 w-full">
+                <div className="text-end mb-8">
+                    <Link to='/addProduct' className='bg-theme text-white py-3 px-5'>+ Add Product</Link>
+                </div>
                 <table className='w-full'>
                     <tr className='bg-theme text-white'>
                         <th className='py-2'>Sr No.</th>
