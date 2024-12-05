@@ -23,6 +23,7 @@ import ReviewForm from './components/Review'
 import AllProductList from './components/Admin/AllProductList'
 import AllCategoryList from './components/Admin/AllCategoryList'
 import AllUsers from './components/Admin/AllUsers'
+import AllOrderList from './components/Admin/AllOrderList'
 
 function AppRoutes() {
   const { isAuthenticated, role } = useAuth();
@@ -36,6 +37,7 @@ function AppRoutes() {
       <Route path='/all_products' element={<AllProducts />}></Route>
       <Route path='/product_detail' element={<ProductDetailsPage />}></Route>
       <Route path='/all_users' element={<AllUsers />}></Route>
+      <Route path='/all_orders' element={<AllOrderList />}></Route>
       <Route path='/placeOrder/:productId' element={<PlaceOrder></PlaceOrder>}></Route> {
         isAuthenticated && (
           <>
