@@ -2,12 +2,13 @@ import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux';
 import { fetchProducts } from '../../redux/slice/productsSlice';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { BiTrash, BiTrashAlt } from 'react-icons/bi';
 
 const AllCategoryList = () => {
     const { products, status } = useSelector(state => state.products);
     const dispatch = useDispatch();
+    const navigator = useNavigate();
 
     useEffect(() => {
         dispatch(fetchProducts());
@@ -21,7 +22,7 @@ const AllCategoryList = () => {
         <div className='flex justify-center flex-col items-center p-10'>
             <h1 className='text-3xl font-bold text-theme'>All Categories</h1>
             <div className="py-10 w-full">
-                <div className="text-end mb-8">
+                <div className="text-end mb-8" onClick={()=>navigator("/addCategory")}>
                     <Link to='/addCategory' className='bg-theme text-white py-3 px-5'>+ Add Category</Link>
                 </div>
                 <table className='w-full'>

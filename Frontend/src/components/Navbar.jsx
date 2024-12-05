@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCart } from '../redux/slice/cartSlice';
 
 const Navbar = () => {
-    const { isAuthenticated, logout } = useAuth();
+    const { isAuthenticated, logout, role } = useAuth();
     const dispatch = useDispatch();
     const { items } = useSelector(state => state.cart);
     const { profile } = useSelector(state => state.users);
@@ -26,6 +26,11 @@ const Navbar = () => {
                 <div className='flex gap-5'>
                     <Link to='/' className='font-medium font-verdana text-gray-800 hover:text-theme'>Home</Link>
                     <Link to='/all_products' className='font-medium font-verdana text-gray-800 hover:text-theme '>All Clothes</Link>
+                    {
+                        isAuthenticated && role === "[ROLE_ADMIN]" &&
+                    <Link to='/adminPortal' className='font-medium font-verdana text-gray-800 hover:text-theme '>Dashboard</Link>
+
+                    }
                 </div>
                 <div className='flex gap-5'>
                     {
@@ -43,7 +48,10 @@ const Navbar = () => {
                         <div className="absolute bg-black w-5 h-5 flex justify-center items-center text-white rounded-full -top-[12px] -right-2 text-sm">{items?.length || 0}</div>
                     </Link>
                     {isAuthenticated &&
-                        <FaSignOutAlt className='text-3xl hover:text-theme' onClick={() => logout()} />
+                        <>
+                            <FaSignOutAlt className='text-3xl hover:text-theme' onClick={() => logout()} />
+                        </>
+                        
                     }
                 </div>
             </div>

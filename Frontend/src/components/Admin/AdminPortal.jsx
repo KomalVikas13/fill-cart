@@ -1,8 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/FillCartLogo.png'
+import { BiCategory, BiShoppingBag, BiUserCheck } from 'react-icons/bi';
+import { FaGoodreadsG } from 'react-icons/fa';
+import { MdShoppingCartCheckout } from 'react-icons/md';
 
 const AdminPortal = () => {
+  const navigator = useNavigate()
   return (
     <div className="flex flex-col items-center h-screen bg-white justify-center">
       <img src={logo} width={100} />
@@ -25,31 +29,31 @@ const AdminPortal = () => {
         </Link>
       </div>
       <div className="flex gap-10 py-10">
-        <div className='rounded-lg shadow-2xl bg-white'>
+        <div className='rounded-lg shadow-2xl bg-white' onClick={()=>navigator("/category_list")}>
           <div className="flex gap-2 items-center px-5 pt-10">
             <BiCategory className='text-3xl text-theme' />
-            <h3 className='font-semibold'>Total Category Count</h3>
+            <h3 className='font-semibold'>All Categories</h3>
           </div>
           <p className='text-theme font-bold text-2xl text-center pt-2'>10</p>
         </div>
-        <div className='rounded-lg shadow-2xl bg-white'>
+        <div className='rounded-lg shadow-2xl bg-white' onClick={()=>navigator("/product_list")}>
           <div className="flex gap-2 items-center px-5 pt-10">
             <BiShoppingBag className='text-3xl text-theme' />
-            <h3 className='font-semibold'>Total Products Count</h3>
+            <h3 className='font-semibold'>All Products</h3>
           </div>
           <p className='text-theme font-bold text-2xl text-center pt-2'>10</p>
         </div>
         <div className='rounded-lg shadow-2xl bg-white'>
           <div className="flex gap-2 items-center px-5 pt-10">
             <MdShoppingCartCheckout className='text-3xl text-theme' />
-            <h3 className='font-semibold'>Total Order Placed</h3>
+            <h3 className='font-semibold'>All Orders</h3>
           </div>
           <p className='text-theme font-bold text-2xl text-center pt-2'>10</p>
         </div>
         <div className='rounded-lg shadow-2xl bg-white'>
           <div className="flex gap-2 items-center px-5 pt-10">
             <BiUserCheck className='text-3xl text-theme' />
-            <h3 className='font-semibold'>Total User Count</h3>
+            <h3 className='font-semibold'>All Users</h3>
           </div>
           <p className='text-theme font-bold text-2xl text-center pt-2'>10</p>
         </div>
