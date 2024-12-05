@@ -38,6 +38,8 @@ function AppRoutes() {
       <Route path='/product_detail' element={<ProductDetailsPage />}></Route>
       <Route path='/all_users' element={<AllUsers />}></Route>
       <Route path='/all_orders' element={<AllOrderList />}></Route>
+      <Route path='/all_orders' element={<AllOrderList />}></Route>
+      <Route path='/all_categories' element={<AllCategoryList />}></Route>
       <Route path='/placeOrder/:productId' element={<PlaceOrder></PlaceOrder>}></Route> {
         isAuthenticated && (
           <>
