@@ -36,14 +36,6 @@ const AllCategoryList = () => {
                             <tr key={index} className={`text-center ${index % 2 != 0 ? 'bg-red-200' : 'bg-white'} `}>
                                 <td className='py-3'>{index + 1}</td>
                                 <td className='py-3'>{item.name}</td>
-                                <td className='py-3'>
-                                    <Link>
-                                        <div className="inline-flex justify-center items-center gap-2 bg-theme px-5 py-2 rounded-lg text-white">
-                                            <BiTrashAlt />
-                                            <p className='text-white m-0 inline'>Delete</p>
-                                        </div>
-                                    </Link>
-                                </td>
                             </tr>
                         )
                     })}
