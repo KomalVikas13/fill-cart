@@ -49,10 +49,13 @@ export const AuthProvider = ({ children }) => {
                 setRole(response.data.role)
                 toast.success("Login Successful..!");
                 dispatch(saveUser(response.data))
-                if(response.data.role === "[ROLE_ADMIN]"){
+                if(response.data.role == "[ROLE_ADMIN]"){
                     navigator('/adminPortal')
                 }
-                navigator("/");
+                else{
+                    navigator("/");
+                }
+                
             }
         } catch (error) {
             console.log(error);

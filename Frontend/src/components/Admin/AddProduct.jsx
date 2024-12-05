@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const AddProduct = () => {
   const [product, setProduct] = useState({
@@ -8,10 +11,11 @@ const AddProduct = () => {
     category: "",
     description: "",
     price: "",
-    image: null,
+    images: "",
   });
   const [errors, setErrors] = useState({});
   const navigator = useNavigate();
+  const { jwtToken } = useAuth()
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -21,12 +25,6 @@ const AddProduct = () => {
     });
   };
 
-  const handleFileChange = (e) => {
-    setProduct({
-      ...product,
-      image: e.target.files[0],
-    });
-  };
 
   const validateForm = () => {
     const newErrors = {};
@@ -38,29 +36,45 @@ const AddProduct = () => {
       newErrors.description = "Description is required.";
     if (!product.price.trim() || parseFloat(product.price) <= 0)
       newErrors.price = "Price must be a positive number.";
-    if (!product.image) newErrors.image = "Product image is required.";
+    if (!product.images) newErrors.image = "Product image is required.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // Valid if no errors
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
       console.log("Product Submitted: ", product);
-      // Clear the form
-      setProduct({
-        name: "",
-        stock: "",
-        category: "",
-        price: "",
-        description: "",
-        image: null,
-      });
+      
       setErrors({});
+    
+      try {
+        const response = await axios.post("http://localhost:8080/admin/products", product, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+            "Content-Type": "application/json",
+          }
+        });
+        
+        const message = response.data;
+        toast.success(message);
+        
+        setProduct({
+          name: "",
+          stock: "",
+          category: "",
+          price: "",
+          description: "",
+          images: "",
+        });
+      } catch (error) {
+        console.log(error);
+        const message = error.response?.data || "An error occurred";
+        toast.error(message);
+      }
     }
   };
-
   return (
     <div className="p-6 bg-white rounded shadow-md flex flex-col h-screen justify-center items-center mx-auto">
       <h2 className="text-xl font-semibold mb-4">Add New Product</h2>
@@ -142,13 +156,13 @@ const AddProduct = () => {
         <div className="mb-4">
           <input
             type="text"
-            name="image"
+            name="images"
             className="border rounded p-2 w-full"
-            onChange={handleFileChange}
+            onChange={handleInputChange}
             placeholder="Enter URL"
           />
           {errors.image && (
-            <p className="text-red-500 text-sm">{errors.image}</p>
+            <p className="text-red-500 text-sm">{errors.images}</p>
           )}
         </div>
 

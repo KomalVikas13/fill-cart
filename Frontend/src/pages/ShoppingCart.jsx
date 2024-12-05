@@ -44,7 +44,7 @@ const ShoppingCart = () => {
                             <p className="mb-0 font-bold text-black">{cart.totalAmount}</p>
                         </div>
                         <div className='text-center pb-5'>
-                            <button onClick={()=>navigator('/placeOrder')} className="bg-[#fd6b68] text-white font-semibold py-3 px-16 rounded-xl hover:bg-[#e85b5a]" >
+                            <button onClick={()=>navigator(`/placeOrder`)} className="bg-[#fd6b68] text-white font-semibold py-3 px-16 rounded-xl hover:bg-[#e85b5a]" >
                                             Buy All
                             </button>
                         </div>
