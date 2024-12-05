@@ -20,6 +20,7 @@ import PlaceOrder from './components/PlaceOrder'
 import PaymentSuccess from './components/PaymentSuccess'
 import PaymentFailed from './components/PaymentFailed'
 import ReviewForm from './components/Review'
+import AllProductList from './components/Admin/AllProductList'
 
 function AppRoutes() {
   const { isAuthenticated, role } = useAuth();
@@ -32,7 +33,8 @@ function AppRoutes() {
       <Route path='/cart' element={<ShoppingCart />}></Route>
       <Route path='/all_products' element={<AllProducts />}></Route>
       <Route path='/product_detail' element={<ProductDetailsPage />}></Route>
-      
+      <Route path='/product_list' element={<AllProductList />}></Route>
+
       <Route path='/placeOrder/:productId' element={<PlaceOrder></PlaceOrder>}></Route> {
         isAuthenticated && (
           <>
