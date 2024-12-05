@@ -100,4 +100,7 @@ public class OrderService {
         return orderRepository.findByUser(user);
     }
 
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
 }
