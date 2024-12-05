@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/FillCartLogo.png'
 import { BiCategory, BiShoppingBag, BiUserCheck } from 'react-icons/bi';
-import { FaGoodreadsG } from 'react-icons/fa';
 import { MdShoppingCartCheckout } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProducts } from '../../redux/slice/productsSlice';
 
 const AdminPortal = () => {
-  const navigator = useNavigate()
+  const { products, status } = useSelector(state => state.products);
+    const dispatch = useDispatch();
+    const navigator = useNavigate()
+
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, [dispatch]);
+
+    if (status == 'loading') {
+        return <div>Loading....</div>
+    }
+
   return (
     <div className="flex flex-col items-center h-screen bg-white justify-center">
       <img src={logo} width={100} />
@@ -41,7 +53,7 @@ const AdminPortal = () => {
             <BiShoppingBag className='text-3xl text-theme' />
             <h3 className='font-semibold'>All Products</h3>
           </div>
-          <p className='text-theme font-bold text-2xl text-center pt-2'>10</p>
+          <p className='text-theme font-bold text-2xl text-center pt-2'>{products.length}</p>
         </div>
         <div className='rounded-lg shadow-2xl bg-white'>
           <div className="flex gap-2 items-center px-5 pt-10">

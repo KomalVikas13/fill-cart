@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 const AddCategory = () => {
   const [category, setCategory] = useState("");
-  const [categoriesList, setCategoriesList] = useState([]);
   const navigator = useNavigate();
 
   const handleAddCategory = () => {
@@ -35,14 +34,6 @@ const AddCategory = () => {
         Add Category
       </button>
 
-      <h3 className="mt-6 mb-2 font-semibold">Categories List:</h3>
-      <ul>
-        {categoriesList.map((cat, index) => (
-          <li key={index} className="border-b py-1">
-            {cat}
-          </li>
-        ))}
-      </ul>
       <br />
       <button
         className="bg-black text-white px-6 py-2 rounded-lg shadow-lg"
