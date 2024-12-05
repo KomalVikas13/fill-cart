@@ -6,12 +6,18 @@ import { MdShoppingCartCheckout } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../../redux/slice/productsSlice';
 import { fetchAllUsers } from '../../redux/slice/userSlice';
+import { fetchAllOrders } from '../../redux/slice/orderSlice';
 
 const AdminPortal = () => {
   const { products } = useSelector(state => state.products);
   const { profile, status, users } = useSelector(state => state.users);
+  const { orders } = useSelector(state => state.orders);
     const dispatch = useDispatch();
     const navigator = useNavigate()
+
+    useEffect(() => {
+        dispatch(fetchAllOrders(profile.token));
+    }, [dispatch]);
 
     useEffect(() => {
         dispatch(fetchProducts());
@@ -62,12 +68,12 @@ const AdminPortal = () => {
           </div>
           <p className='text-theme font-bold text-2xl text-center pt-2'>{products.length}</p>
         </div>
-        <div className='rounded-lg shadow-2xl bg-white'>
+        <div className='rounded-lg shadow-2xl bg-white' onClick={()=>navigator("/all_orders")}>
           <div className="flex gap-2 items-center px-5 pt-10">
             <MdShoppingCartCheckout className='text-3xl text-theme' />
             <h3 className='font-semibold'>All Orders</h3>
           </div>
-          <p className='text-theme font-bold text-2xl text-center pt-2'>10</p>
+          <p className='text-theme font-bold text-2xl text-center pt-2'>{orders.length}</p>
         </div>
         <div className='rounded-lg shadow-2xl bg-white' onClick={()=>navigator("/all_users")}>
           <div className="flex gap-2 items-center px-5 pt-10">
