@@ -7,10 +7,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../../redux/slice/productsSlice';
 import { fetchAllUsers } from '../../redux/slice/userSlice';
 import { fetchAllOrders } from '../../redux/slice/orderSlice';
+import { fetchAllCategories } from '../../redux/slice/categorySlice';
 
 const AdminPortal = () => {
   const { products } = useSelector(state => state.products);
   const { profile, status, users } = useSelector(state => state.users);
+  const { categories } = useSelector(state => state.categories);
   const { orders } = useSelector(state => state.orders);
     const dispatch = useDispatch();
     const navigator = useNavigate()
@@ -26,6 +28,10 @@ const AdminPortal = () => {
     
     useEffect(() => {
         dispatch(fetchAllUsers(profile.token));
+    }, [dispatch]);
+
+    useEffect(() => {
+      dispatch(fetchAllCategories());
     }, [dispatch]);
 
     if (status == 'loading') {
@@ -59,7 +65,7 @@ const AdminPortal = () => {
             <BiCategory className='text-3xl text-theme' />
             <h3 className='font-semibold'>All Categories</h3>
           </div>
-          <p className='text-theme font-bold text-2xl text-center pt-2'>10</p>
+          <p className='text-theme font-bold text-2xl text-center pt-2'>{categories.length}</p>
         </div>
         <div className='rounded-lg shadow-2xl bg-white' onClick={()=>navigator("/product_list")}>
           <div className="flex gap-2 items-center px-5 pt-10">

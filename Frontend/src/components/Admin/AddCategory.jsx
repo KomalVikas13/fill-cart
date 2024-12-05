@@ -1,18 +1,30 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const AddCategory = () => {
   const [formData, setFormData] = useState({ name: "", description: "" });
   const navigator = useNavigate();
+  const { jwtToken } = useAuth()
 
-  const handleAddCategory = () => {
+  const handleAddCategory = async () => {
     if (formData.name.trim() && formData.description.trim()) {
-      // Assuming categoriesList and setCategoriesList are properly defined elsewhere
-      setCategoriesList([
-        ...categoriesList,
-        { name: formData.name, description: formData.description },
-      ]);
-      setFormData({ name: "", description: "" }); // Reset the form
+      try {
+        const response = await axios.post("http://localhost:8080/admin/categories",formData,{
+          headers : {
+            Authorization : `Bearer ${jwtToken}`
+          }
+        })
+        toast.success("Category added Successfully..!")
+        setFormData({ name: "", description: "" }); // Reset the form
+        navigator("/category_list")
+      } catch (error) {
+        let message = error.response.data;
+        toast.error(message)
+      }
+      
     }
   };
 
