@@ -24,7 +24,7 @@ const AllOrderList = () => {
             <h1 className='text-3xl font-bold text-theme'>All Orders</h1>
             <div className="py-10 w-full">
                 <table className="table-auto border-collapse border border-gray-400 w-full text-left">
-                    <thead className="bg-gray-200">
+                    <thead className="bg-theme">
                         <tr>
                             <th className="border border-gray-400 px-4 py-2">Order ID</th>
                             <th className="border border-gray-400 px-4 py-2">Total Amount</th>

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux';
+import { fetchProducts } from '../../redux/slice/productsSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { BiTrashAlt } from 'react-icons/bi';
 import { fetchAllCategories } from '../../redux/slice/categorySlice';

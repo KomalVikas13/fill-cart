@@ -25,10 +25,11 @@ const AllUsers = () => {
                 <table className='w-full'>
                     <tr className='bg-theme text-white'>
                         <th className='py-2'>Sr No.</th>
+                        <th className='py-2'>User Id</th>
                         <th className='py-2'>Name</th>
-                        <th className='py-2'>Phone No.</th><th className='py-2'>Email</th>
+                        <th className='py-2'>Phone No.</th>
+                        <th className='py-2'>Email</th>
                         <th className='py-2'>Address</th>
-                        <th className='py-2'>Action</th>
                     </tr>
                     {users?.length && users.map((item, index) => {
                         return (
@@ -39,14 +40,6 @@ const AllUsers = () => {
                                 <td className='py-3'>{item.phoneNumber}</td>
                                 <td className='py-3'>{item.email}</td>
                                 <td className='py-3'>{item.address}</td>
-                                <td className='py-3'>
-                                    <Link>
-                                        <div className="inline-flex justify-center items-center gap-2 bg-theme px-5 py-2 rounded-lg text-white">
-                                            <BiTrashAlt />
-                                            <p className='text-white m-0 inline'>Delete</p>
-                                        </div>
-                                    </Link>
-                                </td>
                             </tr>
                         )
                     })}

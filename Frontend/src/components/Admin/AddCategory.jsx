@@ -1,18 +1,37 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const AddCategory = () => {
-  const [category, setCategory] = useState("");
-  const [categoriesList, setCategoriesList] = useState([]);
+  const [formData, setFormData] = useState({ name: "", description: "" });
   const navigator = useNavigate();
+  const { jwtToken } = useAuth()
 
-  const handleAddCategory = () => {
-    if (category.trim()) {
-      setCategoriesList([...categoriesList, category]);
-      setCategory(""); // Reset input
+  const handleAddCategory = async () => {
+    if (formData.name.trim() && formData.description.trim()) {
+      try {
+        const response = await axios.post("http://localhost:8080/admin/categories",formData,{
+          headers : {
+            Authorization : `Bearer ${jwtToken}`
+          }
+        })
+        toast.success("Category added Successfully..!")
+        setFormData({ name: "", description: "" }); // Reset the form
+        navigator("/category_list")
+      } catch (error) {
+        let message = error.response.data;
+        toast.error(message)
+      }
+      
     }
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
 
   return (
     <div className="p-6 bg-white rounded shadow-md flex flex-col h-screen justify-center items-center mx-auto">
@@ -21,10 +40,21 @@ const AddCategory = () => {
       <div className="mb-4">
         <input
           type="text"
+          name="name"
           className="border rounded p-2 w-full"
           placeholder="Enter category name"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
+          value={formData.name}
+          onChange={handleInputChange}
+        />
+      </div>
+
+      <div className="mb-4">
+        <textarea
+          name="description"
+          className="border rounded p-2 w-full"
+          placeholder="Enter category description"
+          value={formData.description}
+          onChange={handleInputChange}
         />
       </div>
 
@@ -35,18 +65,11 @@ const AddCategory = () => {
         Add Category
       </button>
 
-      <h3 className="mt-6 mb-2 font-semibold">Categories List:</h3>
-      <ul>
-        {categoriesList.map((cat, index) => (
-          <li key={index} className="border-b py-1">
-            {cat}
-          </li>
-        ))}
-      </ul>
       <br />
       <button
         className="bg-black text-white px-6 py-2 rounded-lg shadow-lg"
-        onClick={()=>navigator('/adminPortal')}>
+        onClick={() => navigator("/adminPortal")}
+      >
         Back
       </button>
     </div>

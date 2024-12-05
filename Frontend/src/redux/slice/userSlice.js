@@ -16,9 +16,8 @@ export const fetchAllUsers = createAsyncThunk(
         try {
             console.log("Fetching users with token:", token);
 
-            const response = await axios.post(
+            const response = await axios.get(
                 'http://localhost:8080/admin/users',
-                {}, // Empty request body
                 {
                     headers: { Authorization: `Bearer ${token}` },
                     withCredentials: true

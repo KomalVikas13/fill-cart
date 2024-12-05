@@ -57,9 +57,8 @@ const AddProduct = () => {
           }
         });
         
-        const message = response.data;
-        toast.success(message);
-        
+        toast.success("Product added Succesfully..!");
+        navigator("/product_list")
         setProduct({
           name: "",
           stock: "",
