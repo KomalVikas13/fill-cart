@@ -26,8 +26,7 @@ const AllUsers = () => {
                     <tr className='bg-theme text-white'>
                         <th className='py-2'>Sr No.</th>
                         <th className='py-2'>Name</th>
-                        <th className='py-2'>Phone No.</th>
-                        <th className='py-2'>Email</th>
+                        <th className='py-2'>Phone No.</th><th className='py-2'>Email</th>
                         <th className='py-2'>Address</th>
                         <th className='py-2'>Action</th>
                     </tr>
